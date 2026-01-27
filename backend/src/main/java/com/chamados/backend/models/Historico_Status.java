@@ -7,26 +7,27 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "historico_status")
 @Getter
 @Setter
-@Entity
-@Table(name = "comentarios")
-public class Comentario {
+public class Historico_Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String texto;
+    @Enumerated(EnumType.STRING)
+    private Status status_anterior;
+
+    @Enumerated(EnumType.STRING)
+    private Status status_novo;
 
     @CreationTimestamp
-    private LocalDateTime data_envio;
+    private LocalDateTime data_criacao;
 
     @ManyToOne
     @JoinColumn(name = "id_chamado")
     private Chamado chamado;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
 
 }

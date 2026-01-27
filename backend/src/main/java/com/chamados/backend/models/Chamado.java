@@ -14,13 +14,26 @@ import java.time.LocalDateTime;
 public class Chamado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String titulo;
+
     private String descricao;
 
     @Enumerated(EnumType.STRING)
+    private Prioridade prioridade = Prioridade.BAIXA;
+
+    @Enumerated(EnumType.STRING)
     private Status status = Status.ABERTO;
+
+    private String parecer_tecnico;
+
+    @CreationTimestamp
+    private LocalDateTime data_criacao;
+
+    private LocalDateTime data_fechamento;
+
+    //Foreign Keys
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
@@ -33,9 +46,4 @@ public class Chamado {
     @ManyToOne
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;
-
-    private String solucao;
-
-    @CreationTimestamp
-    private LocalDateTime dataCriacao;
 }

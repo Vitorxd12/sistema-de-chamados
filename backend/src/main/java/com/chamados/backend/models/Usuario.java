@@ -13,11 +13,14 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String nome;
+
     @Column(nullable = false, unique = true)
-    private String Email;
+    private String email;
 
     @Column(nullable = false)
-    private String Senha;
+    private String senha;
 
     @Enumerated(EnumType.STRING)
     private Perfil perfil;
