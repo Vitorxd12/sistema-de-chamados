@@ -1,4 +1,4 @@
-package com.chamados.backend.models;
+package com.chamados.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.chamados.backend.models;
+package com.chamados.backend.model;
 
 public enum Prioridade {
     BAIXA,

@@ -1,4 +1,4 @@
-package com.chamados.backend.models;
+package com.chamados.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "historico_status")
 @Getter
 @Setter
-public class Historico_Status {
+public class HistoricoStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
