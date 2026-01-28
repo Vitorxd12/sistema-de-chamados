@@ -2,7 +2,6 @@ package com.chamados.backend.service;
 
 import com.chamados.backend.dto.ChamadoDTO;
 import com.chamados.backend.model.*;
-import com.chamados.backend.repository.CategoriaRepository;
 import com.chamados.backend.repository.ChamadoRepository;
 import com.chamados.backend.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 public class ChamadoService {
 
     private final UsuarioRepository usuarioRepository;
-    private final CategoriaRepository categoriaRepository;
     private final ChamadoRepository chamadoRepository;
     private final HistoricoStatusService historicoStatusService;
 
@@ -26,15 +24,14 @@ public class ChamadoService {
         Usuario usuario = usuarioRepository.findById(dto.idUsuario())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        Categoria categoria = categoriaRepository.findById(dto.idCategoria())
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
+        Categoria categoria = dto.categoria();
 
-        String prioridade = dto.prioridade().toUpperCase();
+        String prioridade = dto.prioridade().name();
 
         Chamado chamado = new Chamado();
         chamado.setTitulo(dto.titulo());
         chamado.setDescricao(dto.descricao());
-        chamado.setPrioridade(Prioridade.valueOf(dto.prioridade().toUpperCase()));
+        chamado.setPrioridade(Prioridade.valueOf(dto.prioridade().name()));
         chamado.setCliente(usuario);
         chamado.setCategoria(categoria);
         chamado.setStatus(Status.ABERTO);

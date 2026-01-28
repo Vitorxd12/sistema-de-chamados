@@ -1,22 +1,26 @@
 package com.chamados.backend.dto;
 
+import com.chamados.backend.model.Categoria;
+import com.chamados.backend.model.Prioridade;
+import com.chamados.backend.model.Status;
+
 import java.time.LocalDateTime;
 
 public class ChamadoDTO {
     public record Create(
             String titulo,
             String descricao,
-            String prioridade,
+            Prioridade prioridade,
             Long idUsuario,
-            Long idCategoria
+            Categoria categoria
     ) {
     }
 
     public record Resumo(
             Long id,
             String titulo,
-            String status,
-            String prioridade,
+            Status status,
+            Prioridade prioridade,
             LocalDateTime dataCriacao,
             String nomeCliente
     ) {
@@ -25,7 +29,7 @@ public class ChamadoDTO {
     public record Detalhado(
             Long id,
             String titulo,
-            String status,
+            Status status,
             String prioridade,
             LocalDateTime dataCriacao,
             String nomeCliente,
