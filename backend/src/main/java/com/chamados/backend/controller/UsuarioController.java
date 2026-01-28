@@ -16,11 +16,11 @@ import java.util.List;
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     @PostMapping("/create")
-    public ResponseEntity<UsuarioDTO.Create> createUsuario(@RequestBody @Valid UsuarioDTO.Create usuario) {
-        UsuarioDTO.Create novoUsuario = usuarioService.criarUsuario(usuario);
+    public ResponseEntity<UsuarioDTO.Response> createUsuario(@RequestBody @Valid UsuarioDTO.Create usuario) {
+        UsuarioDTO.Response novoUsuario = usuarioService.criarUsuario(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
     }
     @PatchMapping("/desativar/{id}")

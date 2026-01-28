@@ -18,7 +18,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioDTO.Create criarUsuario(UsuarioDTO.Create dto) {
+    public UsuarioDTO.Response criarUsuario(UsuarioDTO.Create dto) {
         if (usuarioRepository.findByEmail(dto.email()).isPresent()) {
             throw new RuntimeException("E-mail já cadastrado");
         }
@@ -32,7 +32,13 @@ public class UsuarioService {
         usuario.setAtivo(true);
         usuarioRepository.save(usuario);
 
-        return dto;
+        return new UsuarioDTO.Response(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getPerfil().name(),
+                usuario.isAtivo()
+        );
     }
     public List<UsuarioDTO.Response> listarUsuarios() { // Alterado para List
         return usuarioRepository.findAll().stream()
