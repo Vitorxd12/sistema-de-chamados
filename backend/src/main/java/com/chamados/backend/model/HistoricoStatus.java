@@ -17,16 +17,16 @@ public class HistoricoStatus {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private Status status_anterior;
+    private Status statusAnterior;
 
     @Enumerated(EnumType.STRING)
-    private Status status_novo;
+    private Status statusNovo;
 
     @CreationTimestamp
-    private LocalDateTime data_criacao;
+    private LocalDateTime dataAlteracao;
 
     @ManyToOne
-    @JoinColumn(name = "id_chamado")
+    @JoinColumn(name = "obj_chamado")
     private Chamado chamado;
 
 

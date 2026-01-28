@@ -16,22 +16,27 @@ public class Chamado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String titulo;
 
+    @Column(nullable = false)
     private String descricao;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Prioridade prioridade = Prioridade.BAIXA;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status = Status.ABERTO;
 
-    private String parecer_tecnico;
+    private String parecerTecnico;
 
+    @Column(nullable = false)
     @CreationTimestamp
-    private LocalDateTime data_criacao;
+    private LocalDateTime dataCriacao;
 
-    private LocalDateTime data_fechamento;
+    private LocalDateTime dataFechamento;
 
     //Foreign Keys
 
