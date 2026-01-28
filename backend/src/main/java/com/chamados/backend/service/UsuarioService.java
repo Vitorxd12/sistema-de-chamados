@@ -1,5 +1,6 @@
 package com.chamados.backend.service;
 
+import com.chamados.backend.dto.UsuarioDTO;
 import com.chamados.backend.model.Perfil;
 import com.chamados.backend.model.Usuario;
 import com.chamados.backend.repository.UsuarioRepository;
@@ -15,16 +16,16 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public void criarUsuario(String nome, String email, String senha, String perfilString) {
-        if (usuarioRepository.findByEmail(email).isPresent()) {
+    public void criarUsuario(UsuarioDTO.Create dto) {
+        if (usuarioRepository.findByEmail(dto.email()).isPresent()) {
             throw new RuntimeException("E-mail já cadastrado");
         }
-        Perfil perfil = Perfil.valueOf(perfilString);
+        Perfil perfil = Perfil.valueOf(dto.perfil());
 
         Usuario usuario = new Usuario();
-        usuario.setNome(nome);
-        usuario.setEmail(email);
-        usuario.setSenha(senha);
+        usuario.setNome(dto.nome());
+        usuario.setEmail(dto.email());
+        usuario.setSenha(dto.senha());
         usuario.setPerfil(perfil);
         usuario.setAtivo(true);
         usuarioRepository.save(usuario);

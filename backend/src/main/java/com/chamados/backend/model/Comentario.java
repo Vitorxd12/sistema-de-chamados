@@ -19,7 +19,7 @@ public class Comentario {
     private String texto;
 
     @CreationTimestamp
-    private LocalDateTime data_envio;
+    private LocalDateTime dataEnvio;
 
     @ManyToOne
     @JoinColumn(name = "id_chamado")

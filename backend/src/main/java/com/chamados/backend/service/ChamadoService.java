@@ -1,5 +1,6 @@
 package com.chamados.backend.service;
 
+import com.chamados.backend.dto.ChamadoDTO;
 import com.chamados.backend.model.*;
 import com.chamados.backend.repository.CategoriaRepository;
 import com.chamados.backend.repository.ChamadoRepository;
@@ -20,24 +21,20 @@ public class ChamadoService {
     private final ChamadoRepository chamadoRepository;
     private final HistoricoStatusService historicoStatusService;
 
-    public void criarChamado(String titulo, String descricao, String prioridade, Long idUsuario, Long idCategoria) {
+    public void criarChamado(ChamadoDTO.Create dto) {
 
-        Usuario usuario = usuarioRepository.findById(idUsuario)
+        Usuario usuario = usuarioRepository.findById(dto.idUsuario())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        Categoria categoria = categoriaRepository.findById(idCategoria)
+        Categoria categoria = categoriaRepository.findById(dto.idCategoria())
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
 
-        prioridade = prioridade.toUpperCase();
-        boolean prioridadeValida = prioridade.equals("BAIXA") || prioridade.equals("MEDIA") || prioridade.equals("ALTA") || prioridade.equals("URGENTE");
-        if(!prioridadeValida) {
-            throw new EntityNotFoundException("Prioridade inválida");
-        }
+        String prioridade = dto.prioridade().toUpperCase();
 
         Chamado chamado = new Chamado();
-        chamado.setTitulo(titulo);
-        chamado.setDescricao(descricao);
-        chamado.setPrioridade(Prioridade.valueOf(prioridade));
+        chamado.setTitulo(dto.titulo());
+        chamado.setDescricao(dto.descricao());
+        chamado.setPrioridade(Prioridade.valueOf(dto.prioridade().toUpperCase()));
         chamado.setCliente(usuario);
         chamado.setCategoria(categoria);
         chamado.setStatus(Status.ABERTO);
@@ -46,11 +43,12 @@ public class ChamadoService {
     }
 
     @Transactional
-    public void assumirChamado(Long idChamado, Long idTecnico) {
-        Chamado chamado = chamadoRepository.findById(idChamado)
+    public void assumirChamado(ChamadoDTO.ControleTecnico dto) {
+
+        Chamado chamado = chamadoRepository.findById(dto.idChamado())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
 
-        Usuario tecnico = usuarioRepository.findById(idTecnico)
+        Usuario tecnico = usuarioRepository.findById(dto.idTecnico())
                 .orElseThrow(() -> new EntityNotFoundException("Técnico não encontrado"));
 
         if(tecnico.getPerfil().equals(Perfil.USER)){
@@ -70,11 +68,11 @@ public class ChamadoService {
     }
 
     @Transactional
-    public void resolverChamado(Long idChamado, String parecerTecnico, Long idTecnico) {
-        Chamado chamado = chamadoRepository.findById(idChamado)
+    public void resolverChamado(ChamadoDTO.ControleTecnico dto) {
+        Chamado chamado = chamadoRepository.findById(dto.idChamado())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
 
-        Usuario tecnico = usuarioRepository.findById(idTecnico)
+        Usuario tecnico = usuarioRepository.findById(dto.idTecnico())
                 .orElseThrow(() -> new EntityNotFoundException("Técnico não encontrado"));
 
         if(tecnico.getPerfil().equals(Perfil.USER)){
@@ -84,7 +82,7 @@ public class ChamadoService {
         Status statusAnterior = chamado.getStatus();
         chamado.setStatus(Status.RESOLVIDO);
         chamado.setDataFechamento(LocalDateTime.now());
-        chamado.setParecerTecnico(parecerTecnico + " (Fechado pelo técnico: " + tecnico.getNome() + ")");
+        chamado.setParecerTecnico(dto.parecerTecnico() + " (Fechado pelo técnico: " + tecnico.getNome() + ")");
 
         chamadoRepository.save(chamado);
         historicoStatusService.registrarMudancaStatus(chamado, statusAnterior, Status.RESOLVIDO);
