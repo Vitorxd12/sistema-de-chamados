@@ -3,7 +3,7 @@ package com.chamados.backend.dto;
 import java.time.LocalDateTime;
 
 public class ComentarioDTO {
-    public record Request(
+    public record Create(
         Long chamadoId,
         Long usuarioId,
         String texto
@@ -14,6 +14,6 @@ public class ComentarioDTO {
         Long usuarioId,
         String nomeUsuario,
         String texto,
-        LocalDateTime dataCriacao
+        LocalDateTime dataEnvio
     ){}
 }

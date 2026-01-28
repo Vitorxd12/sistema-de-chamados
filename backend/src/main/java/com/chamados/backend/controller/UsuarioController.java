@@ -18,20 +18,27 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    @PostMapping("/create")
+    @PostMapping() // Criação de usuário
     public ResponseEntity<UsuarioDTO.Response> createUsuario(@RequestBody @Valid UsuarioDTO.Create usuario) {
         UsuarioDTO.Response novoUsuario = usuarioService.criarUsuario(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
     }
-    @PatchMapping("/desativar/{id}")
+
+    @GetMapping("/{id}") // Obter usuário por ID
+    public ResponseEntity<UsuarioDTO.Response> getUsuarioById(@PathVariable Long id) {
+        UsuarioDTO.Response usuario = usuarioService.obterUsuarioPorId(id);
+        return ResponseEntity.ok(usuario);
+    }
+
+    @GetMapping() // Listar todos os usuários
+    public ResponseEntity<List<UsuarioDTO.Response>> listarUsuarios() {
+        List<UsuarioDTO.Response> usuarios = usuarioService.listarUsuarios();
+        return ResponseEntity.ok(usuarios);
+    }
+
+    @PatchMapping("/desativar/{id}") // Desativar usuário
     public ResponseEntity<String> desativarUsuario(@PathVariable Long id) {
         usuarioService.desativarUsuario(id);
         return ResponseEntity.status(HttpStatus.OK).body("Usuário desativado com sucesso.");
-    }
-
-    @GetMapping("/listar")
-    public ResponseEntity<List<UsuarioDTO.Response>> listarUsuarios() { // List aqui também
-        List<UsuarioDTO.Response> usuarios = usuarioService.listarUsuarios();
-        return ResponseEntity.ok(usuarios);
     }
 }

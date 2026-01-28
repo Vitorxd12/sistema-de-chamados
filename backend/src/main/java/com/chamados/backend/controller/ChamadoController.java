@@ -18,7 +18,7 @@ public class ChamadoController {
 
     private ChamadoService chamadoService;
 
-    @PostMapping("/create")
+    @PostMapping // Criação de chamado
     public ResponseEntity<ChamadoDTO.Create> createChamado(@RequestBody @Valid ChamadoDTO.Create chamado) {
         ChamadoDTO.Create novoChamado = chamadoService.criarChamado(chamado);
 

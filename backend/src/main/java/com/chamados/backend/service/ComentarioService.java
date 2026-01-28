@@ -23,7 +23,7 @@ public class ComentarioService {
     private final UsuarioRepository usuarioRepository;
 
 
-    public void adicionarComentario(ComentarioDTO.Request dto) {
+    public ComentarioDTO.Response adicionarComentario(ComentarioDTO.Create dto) {
         Chamado chamado = chamadoRepository.findById(dto.chamadoId())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
         Usuario usuario = usuarioRepository.findById(dto.usuarioId())
@@ -44,6 +44,15 @@ public class ComentarioService {
         comentario.setTexto(dto.texto());
 
         comentarioRepository.save(comentario);
+
+        return new ComentarioDTO.Response(
+                comentario.getId(),
+                chamado.getId(),
+                usuario.getId(),
+                usuario.getNome(),
+                comentario.getTexto(),
+                comentario.getDataEnvio()
+        );
     }
     public List<ComentarioDTO.Response> comentariosDoChamado(long chamadoId) {
         Chamado chamado = chamadoRepository.findById(chamadoId)
