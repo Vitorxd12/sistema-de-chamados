@@ -36,10 +36,15 @@ public class ChamadoDTO {
     ) {
     }
 
-    public record ControleTecnico(
+    public record Concluir(
             String parecerTecnico,
             Long idTecnico,
             Long idChamado
+    ) {
+    }
+    public record Assumir(
+            Long idChamado,
+            Long idTecnico
     ) {
     }
 

@@ -21,7 +21,7 @@ public class ChamadoService {
     private final ChamadoRepository chamadoRepository;
     private final HistoricoStatusService historicoStatusService;
 
-    public void criarChamado(ChamadoDTO.Create dto) {
+    public ChamadoDTO.Create criarChamado(ChamadoDTO.Create dto) {
 
         Usuario usuario = usuarioRepository.findById(dto.idUsuario())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
@@ -40,10 +40,11 @@ public class ChamadoService {
         chamado.setStatus(Status.ABERTO);
 
         chamadoRepository.save(chamado);
+        return dto;
     }
 
     @Transactional
-    public void assumirChamado(ChamadoDTO.ControleTecnico dto) {
+    public ChamadoDTO.Assumir assumirChamado(ChamadoDTO.Assumir dto) {
 
         Chamado chamado = chamadoRepository.findById(dto.idChamado())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
@@ -65,10 +66,11 @@ public class ChamadoService {
 
         chamadoRepository.save(chamado);
         historicoStatusService.registrarMudancaStatus(chamado, statusAnterior, Status.EM_ANDAMENTO);
+        return dto;
     }
 
     @Transactional
-    public void resolverChamado(ChamadoDTO.ControleTecnico dto) {
+    public ChamadoDTO.Concluir resolverChamado(ChamadoDTO.Concluir dto) {
         Chamado chamado = chamadoRepository.findById(dto.idChamado())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
 
@@ -86,5 +88,6 @@ public class ChamadoService {
 
         chamadoRepository.save(chamado);
         historicoStatusService.registrarMudancaStatus(chamado, statusAnterior, Status.RESOLVIDO);
+        return dto;
     }
 }
