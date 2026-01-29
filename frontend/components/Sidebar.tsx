@@ -11,6 +11,8 @@ import {FaUsers, FaClipboardList, FaHeadset} from "react-icons/fa";
 import {IoSettingsSharp, IoLogOutOutline, IoTicket} from "react-icons/io5";
 import {FiChevronLeft, FiChevronRight} from "react-icons/fi";
 
+import {userRole} from "@/app/pages/login/page";
+
 type IconType = React.ComponentType<{ className?: string }>;
 
 function SidebarItem({href, icon: Icon, label, collapsed}: {
@@ -46,7 +48,6 @@ function SidebarItem({href, icon: Icon, label, collapsed}: {
 export function Sidebar() {
     const [collapsed, setCollapsed] = useState(false);
     const [theme, setTheme] = useState("dark");
-    const userRole = "Admin";
 
     // Lógica de Toggle de Tema
     useEffect(() => {
@@ -100,17 +101,15 @@ export function Sidebar() {
 
             {/* Itens do Menu (Todos restaurados) */}
             <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5 custom-scrollbar">
-                {userRole === "Admin" && (
+                {userRole === "SUPPORT" && (
                     <div>
-                        <SidebarItem href="/dashboard" icon={MdDashboard} label="Dashboard" collapsed={collapsed}/>
-                        <SidebarItem href="/usuarios" icon={FaUsers} label="Usuários" collapsed={collapsed}/>
-                        <SidebarItem href="/configuracoes" icon={IoSettingsSharp} label="Configurações"
-                                     collapsed={collapsed}/>
+                        <SidebarItem href="/pages/dashboard" icon={MdDashboard} label="Dashboard" collapsed={collapsed}/>
+                        <SidebarItem href="/pages/usuarios" icon={FaUsers} label="Usuários" collapsed={collapsed}/>
                         <div className="my-4 h-px bg-white/5 mx-2"/>
                     </div>
                 )}
-                <SidebarItem href="/novo-chamado" icon={IoTicket} label="Novo Chamado" collapsed={collapsed}/>
-                <SidebarItem href="/chamados-usuario" icon={FaClipboardList} label="Meus Chamados"
+                <SidebarItem href="/pages/novo-chamado" icon={IoTicket} label="Novo Chamado" collapsed={collapsed}/>
+                <SidebarItem href="/pages/chamados-usuario" icon={FaClipboardList} label="Meus Chamados"
                              collapsed={collapsed}/>
             </div>
 
@@ -124,7 +123,7 @@ export function Sidebar() {
                     </div>
                     {!collapsed && (
                         <div className="min-w-0 flex-1">
-                            <div className="truncate text-sm font-semibold">Admin Teste</div>
+                            <div className="truncate text-sm font-semibold">{userRole} Teste</div>
                             <div className="text-[10px] opacity-40 uppercase">Suporte Nível 3</div>
                         </div>
                     )}
@@ -134,8 +133,10 @@ export function Sidebar() {
                                     className="p-1.5 rounded-lg hover:opacity-50 text-[rgb(var(--texto))]/60 transition-all">
                                 {theme === "dark" ? <MdLightMode size={20}/> : <MdDarkMode size={20}/>}
                             </button>
-                            <button className="text-[rgb(var(--texto))]/40 hover:text-red-400 p-2"><IoLogOutOutline
-                                size={20}/></button>
+                            <Link href={'/pages/login'}>
+                                <button className="text-[rgb(var(--texto))]/40 hover:text-red-400 p-2"><IoLogOutOutline
+                                    size={20}/></button>
+                            </Link>
                         </div>
                     )}
                 </div>
