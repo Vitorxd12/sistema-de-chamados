@@ -1,18 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Sidebar } from "@/components/Sidebar";
 import { IoPeople, IoPersonAdd, IoShieldCheckmark, IoCloseCircle, IoCheckmarkCircle } from "react-icons/io5";
-import { UsuarioResponse, PerfilUsuario} from "@/types/interfaces";
+import { UsuarioResponse, PerfilUsuario } from "@/types/interfaces";
 import Link from "next/link";
-
-const MOCK_USUARIOS: UsuarioResponse[] = [
-    { id: 1, nome: "Ana Silva", email: "ana@empresa.com", perfil: "SUPPORT", ativo: true },
-    { id: 2, nome: "Carlos Lima", email: "carlos@cliente.com", perfil: "USER", ativo: false },
-];
+import {UsuarioService} from "@/services/UsuarioService";
 
 export default function GerenciamentoUsuarios() {
-    const [usuarios, setUsuarios] = useState<UsuarioResponse[]>(MOCK_USUARIOS);
+    const [loading, setLoading] = useState(false);
+    const [listaUsuarios, setListaUsuarios] = useState<UsuarioResponse[]>([]);
+
+    const carregarDados = async () => {
+        setLoading(true);
+        try {
+            const listaUsuarios = await UsuarioService.response();
+            setListaUsuarios(listaUsuarios);
+        } catch (err) {
+            console.error("Erro ao carregar dados do dashboard:", err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        carregarDados()
+    }, []);
+
 
     const getPerfilStyle = (perfil: PerfilUsuario) => {
         switch (perfil) {
@@ -22,7 +36,7 @@ export default function GerenciamentoUsuarios() {
     };
 
     return (
-        <div className="flex min-h-screen text-[rgb(var(--texto))] ">
+        <div className="flex h-screen min-h-screen text-[rgb(var(--texto))] ">
             <Sidebar />
 
             <main className="flex-1 p-8 flex justify-center ">
@@ -60,7 +74,7 @@ export default function GerenciamentoUsuarios() {
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-[var(--glass-border)]">
-                            {usuarios.map((user) => (
+                            {listaUsuarios.map((user) => (
                                 <tr key={user.id} className="hover:bg-white/5 transition-colors group">
                                     <td className="px-6 py-5">
                                         <div className="flex flex-col">
@@ -97,9 +111,13 @@ export default function GerenciamentoUsuarios() {
                             ))}
                             </tbody>
                         </table>
-                        <p className={'p-4 pl-10 opacity-60 text-xs italic'}>Total de {usuarios.length} usuários registrados no sistema</p>
-                    </section>
+                        {loading ? (
+                            <p className="p-4 text-center italic opacity-60">Carregando usuários...</p>
+                            ) : (
+                            <p className={'p-4 pl-10 opacity-60 text-xs italic'}>Total de {listaUsuarios.length} usuários registrados no sistema</p>
+                            )}
 
+                    </section>
 
                 </div>
             </main>

@@ -41,7 +41,7 @@ export default function NovoChamado() {
     };
 
     return (
-        <div className="flex min-h-screen text-[rgb(var(--texto))]">
+        <div className="flex h-screen min-h-screen text-[rgb(var(--texto))]">
             <Sidebar />
             <main className="flex-1 flex flex-col items-center p-8">
                 <div className="w-full max-w-2xl space-y-6">

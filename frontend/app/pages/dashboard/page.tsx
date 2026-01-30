@@ -34,10 +34,10 @@ export default function SupportDashboard() {
 
 
     return (
-        <div className="flex min-h-screen text-[rgb(var(--texto))]">
+        <div className="flex min-h-screen text-[rgb(var(--texto))] h-screen">
             <Sidebar/>
 
-            <main className="flex-1 p-8 space-y-6 overflow-y-auto custom-scrollbar">
+            <main className="flex-1 p-8 space-y-6 overflow-y-auto custom-scrollbar ">
 
                 {/* Header Operacional */}
                 <header
@@ -108,7 +108,7 @@ export default function SupportDashboard() {
                                                 className={`px-3 py-1 rounded-lg text-[10px] font-bold border ${getPrioridadeEstilo(i.prioridade)}`}>{i.prioridade}</span>
                                             <button
                                                 className="bg-[rgb(var(--roxo-claro))] hover:bg-[rgb(var(--roxo-claro))]/80 text-white text-xs font-bold py-2 px-4 rounded-xl transition-all shadow-lg active:scale-95">
-                                                Assumir
+                                                Ver Detalhes
                                             </button>
                                         </div>
                                     </div>

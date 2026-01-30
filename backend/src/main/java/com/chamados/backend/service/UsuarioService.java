@@ -5,9 +5,7 @@ import com.chamados.backend.model.Perfil;
 import com.chamados.backend.model.Usuario;
 import com.chamados.backend.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.EnumType;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +39,7 @@ public class UsuarioService {
         );
     }
     public List<UsuarioDTO.Response> listarUsuarios() { // Alterado para List
-        return usuarioRepository.findAll().stream()
+        return usuarioRepository.findAllByOrderByIdDesc().stream()
                 .map(u -> new UsuarioDTO.Response(
                         u.getId(),
                         u.getNome(),

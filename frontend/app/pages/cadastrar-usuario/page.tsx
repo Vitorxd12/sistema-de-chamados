@@ -41,7 +41,7 @@ export default function NovoUsuario() {
     };
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex h-screen min-h-screen">
             <Sidebar />
             <main className="flex-1 p-8 flex flex-col items-center">
                 <div className="w-full max-w-3xl space-y-6">

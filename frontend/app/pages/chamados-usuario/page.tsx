@@ -4,7 +4,7 @@ import { FaClipboardList } from "react-icons/fa";
 
 export default function MeusChamados() {
     return (
-        <div className="flex min-h-screen">
+        <div className="flex h-screen min-h-screen">
             <Sidebar />
             <main className="flex-1 p-8 flex flex-col gap-6">
                 <header className="liquid-glass rounded-3xl p-6 border border-[var(--glass-border)] flex justify-between items-center">

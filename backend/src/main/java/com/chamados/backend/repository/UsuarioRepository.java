@@ -14,6 +14,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Busca por nome
     List<Usuario> findByNomeContainingIgnoreCase(String nome);
 
+    List<Usuario> findAllByOrderByIdDesc();
+
     // Busca por e-mail para validar unicidade no cadastro
     Optional<Usuario> findByEmail(String email);
 
