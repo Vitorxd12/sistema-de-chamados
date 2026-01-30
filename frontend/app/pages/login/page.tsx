@@ -1,8 +1,15 @@
 'use client';
 import { FaHeadset, FaUser } from "react-icons/fa";
 import Link from "next/link";
-export const userRole = "SUPPORT";
+import {useState} from "react";
 export default function Login() {
+    const [userRole, setUserRole] = useState('USER');
+
+    const handleUserRole = (role: string) => {
+        setUserRole(role);
+        localStorage.setItem('userRole', role);
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[rgb(var(--roxo-claro),0.15)] via-transparent to-transparent">
             <div className="w-full max-w-md liquid-glass p-10 rounded-[40px] border border-[var(--glass-border)] shadow-2xl text-center">
@@ -17,18 +24,25 @@ export default function Login() {
                 <div className="space-y-4">
                     <Link href="/pages/dashboard">
 
-                        <button className="w-full flex m-2 items-center justify-center gap-4 bg-[rgb(var(--roxo-claro))] hover:bg-[rgb(var(--roxo-claro))]/90 text-white font-bold py-5 rounded-2xl transition-all active:scale-95 shadow-lg group">
-                            <FaHeadset size={22} className="group-hover:animate-bounce" />
-                            Entrar como Suporte
-                        </button>
-                    </Link>
+                        <div className="space-y-4">
+                            <Link href="/pages/dashboard" onClick={() => handleUserRole('SUPPORT')}>
+                                <button
+                                    className="w-full flex m-2 items-center justify-center gap-4 bg-[rgb(var(--roxo-claro))] hover:bg-[rgb(var(--roxo-claro))]/90 text-white font-bold py-5 rounded-2xl transition-all active:scale-95 shadow-lg group"
+                                >
+                                    <FaHeadset size={22} className="group-hover:animate-bounce" />
+                                    Entrar como Suporte
+                                </button>
+                            </Link>
 
-                    <Link href="/pages/dashboard">
-
-                        <button className="w-full flex m-2 items-center justify-center gap-4 bg-white/5 hover:bg-white/10 border border-[var(--glass-border)] text-[rgb(var(--texto))] font-bold py-5 rounded-2xl transition-all active:scale-95">
-                            <FaUser size={20} className="opacity-70" />
-                            Entrar como Usuário
-                        </button>
+                            <Link href="/pages/chamados-usuario" onClick={() => handleUserRole('USER')}>
+                                <button
+                                    className="w-full flex m-2 items-center justify-center gap-4 bg-white/5 hover:bg-white/10 border border-[var(--glass-border)] text-[rgb(var(--texto))] font-bold py-5 rounded-2xl transition-all active:scale-95"
+                                >
+                                    <FaUser size={20} className="opacity-70" />
+                                    Entrar como Usuário
+                                </button>
+                            </Link>
+                        </div>
                     </Link>
                 </div>
             </div>

@@ -4,8 +4,30 @@ import {
     IoStatsChart, IoTimeOutline, IoCheckmarkDoneCircle,
     IoAlertCircle, IoPlayCircle, IoFlash, IoChatbubbles
 } from "react-icons/io5";
+import {useEffect, useState} from "react";
+import { DashboardService } from "@/services/DashboardService";
+import { DashboardData } from "@/";
 
 export default function SupportDashboard() {
+    const [loading, setLoading] = useState(false);
+    const [stats, setStats] = useState<DashboardData | null>(null);
+
+    const carregarDados = async () => {
+        setLoading(true);
+        try {
+            const dados = await DashboardService.getStats();
+            setStats(dados);
+        } catch (err) {
+            console.error("Erro ao carregar dados do dashboard:", err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        carregarDados()
+    }, []);
+
     return (
         <div className="flex min-h-screen text-[rgb(var(--texto))]">
             <Sidebar />
@@ -37,7 +59,7 @@ export default function SupportDashboard() {
                     <StatCard icon={<IoCheckmarkDoneCircle />} label="Finalizados (Hoje)" value="12" color="text-green-400" />
                     <div className="liquid-glass rounded-3xl p-6 border border-[var(--glass-border)] flex flex-col justify-center">
                         <p className="text-[10px] font-bold opacity-50 uppercase tracking-widest">SLA Médio</p>
-                        <p className="text-2xl font-black text-[rgb(var(--roxo-claro))]">01:15h</p>
+                        <p className="text-2xl font-black text-[rgb(var(--roxo-claro))]">{stats?.tempoMedioResolucao || "0h0m"}</p>
                     </div>
                 </div>
 

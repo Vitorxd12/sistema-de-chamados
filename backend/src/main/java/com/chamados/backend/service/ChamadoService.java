@@ -26,8 +26,6 @@ public class ChamadoService {
 
         Categoria categoria = dto.categoria();
 
-        String prioridade = dto.prioridade().name();
-
         Chamado chamado = new Chamado();
         chamado.setTitulo(dto.titulo());
         chamado.setDescricao(dto.descricao());
@@ -86,5 +84,23 @@ public class ChamadoService {
         chamadoRepository.save(chamado);
         historicoStatusService.registrarMudancaStatus(chamado, statusAnterior, Status.RESOLVIDO);
         return dto;
+    }
+
+    public ChamadoDTO.Detalhado obterChamadoPorId(Long id) {
+        Chamado chamado = chamadoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
+
+        return new ChamadoDTO.Detalhado(
+                chamado.getId(),
+                chamado.getTitulo(),
+                chamado.getStatus(),
+                chamado.getPrioridade().name(),
+                chamado.getDataCriacao(),
+                chamado.getCliente().getNome(),
+                chamado.getDescricao(),
+                chamado.getTecnico() != null ? chamado.getTecnico().getNome() : null,
+                chamado.getParecerTecnico(),
+                chamado.getDataFechamento()
+        );
     }
 }

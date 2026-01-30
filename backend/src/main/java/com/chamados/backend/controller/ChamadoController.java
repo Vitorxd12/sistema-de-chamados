@@ -34,4 +34,10 @@ public class ChamadoController {
         ChamadoDTO.Concluir chamadoResolvido = chamadoService.resolverChamado(chamado);
         return ResponseEntity.ok(chamadoResolvido);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ChamadoDTO.Detalhado> obterChamadoPorId(@PathVariable Long id) {
+        ChamadoDTO.Detalhado chamado = chamadoService.obterChamadoPorId(id);
+        return ResponseEntity.ok(chamado);
+    }
 }

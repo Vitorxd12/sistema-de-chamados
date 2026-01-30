@@ -11,7 +11,7 @@ export interface ChamadoCreate {
     descricao: string;
     prioridade: Prioridade;
     idUsuario: number;
-    idCategoria: number;
+    categoria: Categoria;
 }
 
 export interface ChamadoResumo {
@@ -83,7 +83,7 @@ export interface DashboardData {
     chamadosEmAndamento: number;
     chamadosResolvidos: number;
     chamadosFechados: number;
-    tempoMedioResolucao: string; // O Java envia como String formatada
+    tempoMedioResolucao: string;
 }
 
 // --- Usuários ---
@@ -102,4 +102,10 @@ export interface UsuarioResponse {
     email: string;
     perfil: PerfilUsuario;
     ativo: boolean;
+}
+export interface UsuarioCreate {
+    nome: string;
+    email: string;
+    senha: string;
+    perfil: PerfilUsuario;
 }

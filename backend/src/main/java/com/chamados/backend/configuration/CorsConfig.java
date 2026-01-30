@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Libera todos os endpoints
-                .allowedOrigins("http://localhost:5173", "http://localhost:3000") // Portas comuns de Vite/React
+                .allowedOrigins("http://localhost:3000") // Portas comuns de Vite/React
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }

@@ -11,8 +11,6 @@ import {FaUsers, FaClipboardList, FaHeadset} from "react-icons/fa";
 import {IoSettingsSharp, IoLogOutOutline, IoTicket} from "react-icons/io5";
 import {FiChevronLeft, FiChevronRight} from "react-icons/fi";
 
-import {userRole} from "@/app/pages/login/page";
-
 type IconType = React.ComponentType<{ className?: string }>;
 
 function SidebarItem({href, icon: Icon, label, collapsed}: {
@@ -48,6 +46,14 @@ function SidebarItem({href, icon: Icon, label, collapsed}: {
 export function Sidebar() {
     const [collapsed, setCollapsed] = useState(false);
     const [theme, setTheme] = useState("dark");
+
+    const [userRole, setRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        // Isso só executa no navegador, então o localStorage vai existir
+        const savedRole = localStorage.getItem('userRole');
+        setRole(savedRole);
+    }, []);
 
     // Lógica de Toggle de Tema
     useEffect(() => {

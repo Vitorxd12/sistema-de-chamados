@@ -49,7 +49,5 @@ public class Chamado {
     @JoinColumn(name = "id_tecnico")
     private Usuario tecnico;
 
-    @ManyToOne
-    @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 }

@@ -2,16 +2,50 @@
 import { useState } from 'react';
 import { Sidebar } from "@/components/Sidebar";
 import { IoPersonAdd, IoSave, IoPerson, IoHeadset } from "react-icons/io5";
+import { UsuarioService } from "@/services/UsuarioService"; // Importe seu serviço
+import { useRouter } from "next/navigation";
 
 export default function NovoUsuario() {
-    const [perfil, setPerfil] = useState<'USER' | 'SUPPORT'>('USER');
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+
+    // 1. Estado para os campos do formulário
+    const [formData, setFormData] = useState({
+        nome: '',
+        email: '',
+        senha: '',
+        perfil: 'USER' as 'USER' | 'SUPPORT' // Alinhado com seu Enum Java
+    });
+
+    // 2. Função para atualizar os campos
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    // 3. Função de envio para o Backend
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            await UsuarioService.create(formData);
+            alert("Usuário cadastrado com sucesso!");
+            router.push('/pages/usuarios'); // Redireciona para a listagem
+        } catch (error: any) {
+            console.error("Erro ao cadastrar:", error);
+            alert(error.response?.data?.message || "Erro ao conectar com o servidor.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 p-8 flex flex-col items-center">
                 <div className="w-full max-w-3xl space-y-6">
-                    <header className="liquid-glass rounded-3xl p-6 border border-[var(--glass-border)] flex items-center gap-4">
+                    <header className="liquid-glass rounded-3xl p-6 border border-[var(--glass-border)] shadow-2xl flex items-center gap-4">
                         <div className="p-3 rounded-2xl bg-[rgb(var(--roxo-claro))]/20 text-[rgb(var(--roxo-claro))] shadow-[0_0_15px_rgba(var(--roxo-claro),0.2)]">
                             <IoPersonAdd size={28} />
                         </div>
@@ -22,19 +56,34 @@ export default function NovoUsuario() {
                     </header>
 
                     <section className="liquid-glass rounded-[40px] p-10 border border-[var(--glass-border)] shadow-2xl">
-                        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <InputField label="Nome Completo" placeholder="Ex: João Silva" />
-                            <InputField label="E-mail" placeholder="joao@empresa.com" type="email" />
+                        {/* 4. Adicione o onSubmit no form */}
+                        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <InputField
+                                label="Nome Completo"
+                                name="nome"
+                                value={formData.nome}
+                                onChange={handleChange}
+                                placeholder="Ex: João Silva"
+                                required
+                            />
+                            <InputField
+                                label="E-mail"
+                                name="email"
+                                type="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="joao@empresa.com"
+                                required
+                            />
 
-                            {/* Seletor de Perfil (Botões) */}
                             <div className="md:col-span-1 flex flex-col gap-3">
                                 <label className="text-[10px] font-bold uppercase opacity-50 ml-1 tracking-wider">Perfil de Acesso</label>
                                 <div className="grid grid-cols-2 gap-4">
                                     <button
                                         type="button"
-                                        onClick={() => setPerfil('USER')}
+                                        onClick={() => setFormData({...formData, perfil: 'USER'})}
                                         className={`flex items-center justify-center gap-3 p-4 rounded-2xl border transition-all duration-300 ${
-                                            perfil === 'USER'
+                                            formData.perfil === 'USER'
                                                 ? 'bg-[rgb(var(--roxo-claro))]/20 border-[rgb(var(--roxo-claro))] text-[rgb(var(--roxo-claro))] shadow-[0_0_20px_rgba(var(--roxo-claro),0.15)]'
                                                 : 'bg-white/5 border-[var(--glass-border)] text-[rgb(var(--texto))]/50 hover:bg-white/10'
                                         }`}
@@ -45,9 +94,9 @@ export default function NovoUsuario() {
 
                                     <button
                                         type="button"
-                                        onClick={() => setPerfil('SUPPORT')}
+                                        onClick={() => setFormData({...formData, perfil: 'SUPPORT'})}
                                         className={`flex items-center justify-center gap-3 p-4 rounded-2xl border transition-all duration-300 ${
-                                            perfil === 'SUPPORT'
+                                            formData.perfil === 'SUPPORT'
                                                 ? 'bg-[rgb(var(--roxo-claro))]/20 border-[rgb(var(--roxo-claro))] text-[rgb(var(--roxo-claro))] shadow-[0_0_20px_rgba(var(--roxo-claro),0.15)]'
                                                 : 'bg-white/5 border-[var(--glass-border)] text-[rgb(var(--texto))]/50 hover:bg-white/10'
                                         }`}
@@ -58,11 +107,24 @@ export default function NovoUsuario() {
                                 </div>
                             </div>
 
-                            <InputField label="Senha Inicial" type="password" placeholder="••••••••" />
-                            <div className="hidden md:block" /> {/* Spacer para manter o grid alinhado */}
+                            <InputField
+                                label="Senha Inicial"
+                                name="senha"
+                                type="password"
+                                value={formData.senha}
+                                onChange={handleChange}
+                                placeholder="••••••••"
+                                required
+                            />
 
-                            <button className="md:col-span-2 mt-4 bg-[rgb(var(--roxo-claro))] py-5 rounded-2xl font-bold text-white flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(var(--roxo-claro),0.4)] transition-all active:scale-95">
-                                <IoSave size={20} /> Finalizar Cadastro
+                            <div className="hidden md:block" />
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="md:col-span-2 mt-4 bg-[rgb(var(--roxo-claro))] py-5 rounded-2xl font-bold text-white flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(var(--roxo-claro),0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {loading ? "Cadastrando..." : <><IoSave size={20} /> Finalizar Cadastro</>}
                             </button>
                         </form>
                     </section>
