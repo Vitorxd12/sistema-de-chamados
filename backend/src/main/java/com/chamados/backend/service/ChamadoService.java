@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -94,7 +95,7 @@ public class ChamadoService {
                 chamado.getId(),
                 chamado.getTitulo(),
                 chamado.getStatus(),
-                chamado.getPrioridade().name(),
+                chamado.getPrioridade(),
                 chamado.getDataCriacao(),
                 chamado.getCliente().getNome(),
                 chamado.getDescricao(),
@@ -103,4 +104,19 @@ public class ChamadoService {
                 chamado.getDataFechamento()
         );
     }
+
+    public List<ChamadoDTO.Resumo> listarChamados() {
+        List<Chamado> chamados = chamadoRepository.findAllByOrderByDataCriacaoDesc();
+        return chamados.stream()
+                .map(c -> new ChamadoDTO.Resumo(
+                        c.getId(),
+                        c.getTitulo(),
+                        c.getStatus(),
+                        c.getPrioridade(),
+                        c.getDataCriacao(),
+                        c.getCliente().getNome()
+                ))
+                .toList();
+    }
+
 }

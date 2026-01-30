@@ -40,4 +40,10 @@ public class ChamadoController {
         ChamadoDTO.Detalhado chamado = chamadoService.obterChamadoPorId(id);
         return ResponseEntity.ok(chamado);
     }
+
+    @GetMapping
+    public ResponseEntity<Iterable<ChamadoDTO.Resumo>> listarChamados() {
+        Iterable<ChamadoDTO.Resumo> chamados = chamadoService.listarChamados();
+        return ResponseEntity.ok(chamados);
+    }
 }

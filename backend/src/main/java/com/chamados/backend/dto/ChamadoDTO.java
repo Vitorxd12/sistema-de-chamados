@@ -5,6 +5,7 @@ import com.chamados.backend.model.Prioridade;
 import com.chamados.backend.model.Status;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ChamadoDTO {
     public record Create(
@@ -30,7 +31,7 @@ public class ChamadoDTO {
             Long id,
             String titulo,
             Status status,
-            String prioridade,
+            Prioridade prioridade,
             LocalDateTime dataCriacao,
             String nomeCliente,
             String descricao,
@@ -46,10 +47,15 @@ public class ChamadoDTO {
             Long idChamado
     ) {
     }
+
     public record Assumir(
             Long idChamado,
             Long idTecnico
     ) {
     }
 
+    public record Lista(
+        List<ChamadoDTO.Resumo> chamados
+    ) {
+    }
 }
