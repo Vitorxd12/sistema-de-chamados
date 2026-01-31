@@ -1,6 +1,6 @@
 // --- Enums / Union Types (De acordo com seus Models Java) ---
 export type Status = 'ABERTO' | 'EM_ANDAMENTO' | 'RESOLVIDO' | 'FECHADO';
-export type PerfilUsuario = 'SUPPORT' | 'USER';
+export type PerfilUsuario = 'SUPPORT' | 'USER' | 'ADMIN';
 export type Prioridade = 'BAIXA' | 'MEDIA' | 'ALTA' | 'URGENTE';
 export type Categoria = 'HARDWARE' | 'SOFTWARE' | 'REDE' | 'TELEFONIA' | 'ACESSO' | 'OUTROS';
 
