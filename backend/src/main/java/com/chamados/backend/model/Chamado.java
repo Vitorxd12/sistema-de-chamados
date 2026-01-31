@@ -39,6 +39,8 @@ public class Chamado {
 
     private LocalDateTime dataFechamento;
 
+    private Categoria categoria;
+
     //Foreign Keys
 
     @ManyToOne
@@ -48,6 +50,4 @@ public class Chamado {
     @ManyToOne
     @JoinColumn(name = "id_tecnico")
     private Usuario tecnico;
-
-    private Categoria categoria;
 }

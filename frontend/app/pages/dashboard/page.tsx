@@ -68,7 +68,7 @@ export default function SupportDashboard() {
 
                     {/* Grid de Métricas Rápidas */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <StatCard icon={<IoAlertCircle/>} label="Aguardando" value={stats?.chamadosAbertos}
+                        <StatCard icon={<IoAlertCircle/>} label="Aguardando" value={stats?.chamadosAbertos || 0}
                                   color="text-red-400"/>
                         <StatCard icon={<IoPlayCircle/>} label="Em Atendimento" value={stats?.chamadosEmAndamento || 0}
                                   color="text-blue-400"/>

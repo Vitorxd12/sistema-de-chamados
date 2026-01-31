@@ -33,8 +33,10 @@ public class SecurityConfigurations {
                         authorize
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/usuarios").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/usuarios").hasRole("SUPPORT")
                                 .requestMatchers(HttpMethod.GET, "/api/dashboard").hasRole("SUPPORT")
+                                .requestMatchers(HttpMethod.PATCH, "/api/chamados/assumir").hasRole("SUPPORT")
+                                .requestMatchers(HttpMethod.PATCH, "/api/chamados/resolver").hasRole("SUPPORT")
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
