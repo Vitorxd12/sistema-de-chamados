@@ -97,6 +97,7 @@ public class ChamadoService {
                 chamado.getStatus(),
                 chamado.getPrioridade(),
                 chamado.getDataCriacao(),
+                chamado.getCategoria(),
                 chamado.getCliente().getNome(),
                 chamado.getDescricao(),
                 chamado.getTecnico() != null ? chamado.getTecnico().getNome() : null,

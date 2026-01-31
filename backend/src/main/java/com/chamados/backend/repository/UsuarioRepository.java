@@ -3,6 +3,7 @@ package com.chamados.backend.repository;
 import com.chamados.backend.model.Perfil;
 import com.chamados.backend.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> findAllByOrderByIdDesc();
 
     // Busca por e-mail para validar unicidade no cadastro
-    Optional<Usuario> findByEmail(String email);
+    UserDetails findByEmail(String email);
 
     // Busca por perfil (Cliente ou Técnico)
     List<Usuario> findByPerfil(Perfil perfil);

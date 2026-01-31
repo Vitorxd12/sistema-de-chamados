@@ -28,6 +28,7 @@ export interface ChamadoDetalhado {
     titulo: string;
     status: Status;
     prioridade: Prioridade;
+    categoria: Categoria;
     dataCriacao: string;
     nomeCliente: string;
     descricao: string;

@@ -33,6 +33,7 @@ public class ChamadoDTO {
             Status status,
             Prioridade prioridade,
             LocalDateTime dataCriacao,
+            Categoria categoria,
             String nomeCliente,
             String descricao,
             String nomeTecnico,

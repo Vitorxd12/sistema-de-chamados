@@ -108,7 +108,7 @@ export default function NovoUsuario() {
                             </div>
 
                             <InputField
-                                label="Senha Inicial"
+                                label="Senha"
                                 name="senha"
                                 type="password"
                                 value={formData.senha}

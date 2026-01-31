@@ -6,6 +6,7 @@ import com.chamados.backend.model.Usuario;
 import com.chamados.backend.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,19 +18,12 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     public UsuarioDTO.Response criarUsuario(UsuarioDTO.Create dto) {
-        if (usuarioRepository.findByEmail(dto.email()).isPresent()) {
+        if (usuarioRepository.findByEmail(dto.email()) != null) {
             throw new RuntimeException("E-mail já cadastrado");
         }
-        Perfil perfil = Perfil.valueOf(dto.perfil());
-
-        Usuario usuario = new Usuario();
-        usuario.setNome(dto.nome());
-        usuario.setEmail(dto.email());
-        usuario.setSenha(dto.senha());
-        usuario.setPerfil(perfil);
-        usuario.setAtivo(true);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.senha());
+        Usuario usuario = new Usuario(dto.nome(), dto.email(), encryptedPassword, dto.perfil(), true);
         usuarioRepository.save(usuario);
-
         return new UsuarioDTO.Response(
                 usuario.getId(),
                 usuario.getNome(),

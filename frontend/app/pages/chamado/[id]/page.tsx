@@ -1,16 +1,53 @@
 'use client';
 
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { Sidebar } from "@/components/Sidebar";
 import {
     IoChatbubbleEllipses, IoTime, IoCheckmarkDone,
     IoPerson, IoInformationCircle, IoSend, IoArrowBack
 } from "react-icons/io5";
 import Link from 'next/link';
+import {useParams} from "next/navigation";
+import {ChamadoService} from "@/services/ChamadoService";
+import {ChamadoDetalhado, DashboardData} from "@/types/interfaces";
 
 export default function DetalhesChamado() {
+    const params = useParams();
+    const id = params.id;
+
+    const [loading, setLoading] = useState(false);
+    const [dados, setDados] = useState<ChamadoDetalhado | null>(null);
+
+    const carregarDados = useCallback(async () => {
+        if (!id) return;
+
+        setLoading(true);
+        try {
+            // id pode vir como string ou string[], tratamos para string
+            const idString = Array.isArray(id) ? id[0] : id;
+            const dadosChamado = await ChamadoService.detalhado(idString);
+            setDados(dadosChamado);
+        } catch (err) {
+            console.error("Erro ao carregar dados do chamado:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        carregarDados();
+    }, [carregarDados]);
+
+    if (loading) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-[#0a0a0a]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[rgb(var(--roxo-claro))]"></div>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex min-h-screen text-[rgb(var(--texto))]">
+        <div className="flex min-h-screen h-screen text-[rgb(var(--texto))]">
             <Sidebar />
 
             <main className="flex-1 h-screen p-8 flex flex-col gap-6 overflow-y-auto custom-scrollbar">
@@ -23,10 +60,10 @@ export default function DetalhesChamado() {
                         </Link>
                         <div>
                             <div className="flex items-center gap-2">
-                                <span className="text-xs font-bold px-2 py-0.5 rounded bg-[rgb(var(--roxo-claro))]/20 text-[rgb(var(--roxo-claro))] border border-[rgb(var(--roxo-claro))]/30">#00882</span>
-                                <h1 className="text-2xl font-bold tracking-tight">Erro de Acesso ao SAP</h1>
+                                <span className="text-xs font-bold px-2 py-0.5 rounded bg-[rgb(var(--roxo-claro))]/20 text-[rgb(var(--roxo-claro))] border border-[rgb(var(--roxo-claro))]/30">#{dados?.id}</span>
+                                <h1 className="text-2xl font-bold tracking-tight">{dados?.titulo || "Título"}</h1>
                             </div>
-                            <p className="text-sm opacity-50 italic">Aberto em 28/01/2026 por Mariana Souza</p>
+                            <p className="text-sm opacity-50 italic">Aberto em {dados?.dataCriacao || "../../.."} por {dados?.nomeCliente || "Nome"}</p>
                         </div>
                     </div>
 
@@ -34,7 +71,7 @@ export default function DetalhesChamado() {
                         <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold text-sm hover:bg-blue-500 hover:text-white transition-all">
                             <IoPerson size={18} /> Assumir Chamado
                         </button>
-                        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-500/20 text-green-400 border border-green-500/30 font-bold text-sm hover:bg-green-500 hover:text-white transition-all">
+                        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-500/20 text-green-600 border border-green-500/30 font-bold text-sm hover:bg-green-500 hover:text-white transition-all">
                             <IoCheckmarkDone size={18} /> Concluir
                         </button>
                     </div>
@@ -42,18 +79,13 @@ export default function DetalhesChamado() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
 
-                    {/* Coluna Central: Descrição e Chat */}
                     <div className="lg:col-span-2 flex flex-col gap-6">
-
-                        {/* Descrição do Problema */}
                         <section className="liquid-glass rounded-3xl p-8 border border-[var(--glass-border)]">
                             <h2 className="text-xs font-bold uppercase opacity-40 mb-4 flex items-center gap-2">
                                 <IoInformationCircle /> Descrição do Chamado
                             </h2>
                             <p className="leading-relaxed opacity-90">
-                                Olá, não estou conseguindo realizar o login no módulo de faturamento do SAP.
-                                O sistema exibe a mensagem "Erro 403: Acesso Negado" mesmo após eu resetar minha senha.
-                                Preciso disso com urgência para fechar o relatório do mês.
+                                {dados?.descricao || "Descrição do chamado não disponível."}
                             </p>
                         </section>
 
@@ -90,10 +122,23 @@ export default function DetalhesChamado() {
                         {/* Detalhes Técnicos */}
                         <div className="liquid-glass rounded-3xl p-6 border border-[var(--glass-border)] space-y-4">
                             <h3 className="text-xs font-bold uppercase opacity-40">Informações Técnicas</h3>
-                            <InfoRow label="Status" value="EM ANDAMENTO" color="text-blue-400" />
-                            <InfoRow label="Prioridade" value="ALTA" color="text-red-400" />
-                            <InfoRow label="Categoria" value="SOFTWARE" />
-                            <InfoRow label="Técnico" value="João Ricardo" />
+
+                            <InfoRow
+                                label="Status"
+                                value={dados?.status}
+                                color={getStatusStyle(dados?.status)}
+                            />
+
+                            <InfoRow
+                                label="Prioridade"
+                                value={dados?.prioridade}
+                                color={getPrioridadeStyle(dados?.prioridade)}
+                            />
+
+
+                            <InfoRow label="Categoria" value={dados?.categoria} color="text-blue-400" />
+
+                            <InfoRow label="Técnico" value={dados?.nomeTecnico || "Pendente"} />
                         </div>
 
                         {/* Histórico (RF: HistoricoStatus) */}
@@ -144,3 +189,27 @@ function TimelineStep({ status, date, active = false }: any) {
         </div>
     );
 }
+const getPrioridadeStyle = (prioridade?: string) => {
+    switch (prioridade) {
+        case 'URGENTE': return "text-red-500 bg-red-500/10 border-red-500/20";
+        case 'ALTA':    return "text-orange-500 bg-orange-500/10 border-orange-500/20";
+        case 'MEDIA':   return "text-yellow-500 bg-yellow-500/10 border-yellow-500/20";
+        case 'BAIXA':   return "text-green-500 bg-green-500/10 border-green-500/20";
+        default:        return "text-gray-400 bg-gray-400/10 border-gray-400/20";
+    }
+};
+const getStatusStyle = (status?: string) => {
+    switch (status?.toUpperCase()) {
+        case 'ABERTO':
+            return "text-red-400";
+        case 'EM_ATENDIENTO':
+            return "text-blue-400";
+        case 'RESOLVIDO':
+            return "text-green-600";
+        case 'FECHADO':
+            return "text-red-400";
+        default:
+            return "text-gray-400";
+    }
+};
+

@@ -18,12 +18,6 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    @PostMapping() // Criação de usuário
-    public ResponseEntity<UsuarioDTO.Response> createUsuario(@RequestBody @Valid UsuarioDTO.Create usuario) {
-        UsuarioDTO.Response novoUsuario = usuarioService.criarUsuario(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
-    }
-
     @GetMapping("/{id}") // Obter usuário por ID
     public ResponseEntity<UsuarioDTO.Response> getUsuarioById(@PathVariable Long id) {
         UsuarioDTO.Response usuario = usuarioService.obterUsuarioPorId(id);
