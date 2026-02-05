@@ -3,7 +3,7 @@ import { UsuarioCreate, UsuarioResponse } from "@/types/interfaces";
 
 export const UsuarioService = {
     create: async (data: UsuarioCreate): Promise<UsuarioResponse> => {
-        const response = await api.post<UsuarioResponse>('/usuarios', data);
+        const response = await api.post<UsuarioResponse>('/auth/register', data);
         return response.data;
     },
     response: async (): Promise<UsuarioResponse[]> => {

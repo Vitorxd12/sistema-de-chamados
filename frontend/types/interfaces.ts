@@ -10,7 +10,6 @@ export interface ChamadoCreate {
     titulo: string;
     descricao: string;
     prioridade: Prioridade;
-    idUsuario: number;
     categoria: Categoria;
 }
 
@@ -41,20 +40,17 @@ export interface ChamadoDetalhado {
 
 export interface ConcluirChamado {
     idChamado: number;
-    idTecnico: number;
     parecerTecnico: string;
 }
 
 export interface AssumirChamado {
     idChamado: number;
-    idTecnico: number;
 }
 
 // --- Comentários ---
 
 export interface CriarComentario {
     chamadoId: number;
-    usuarioId: number;
     texto: string;
 }
 
@@ -89,14 +85,6 @@ export interface DashboardData {
 
 // --- Usuários ---
 
-export interface ChamadoCreate {
-    titulo: string;
-    descricao: string;
-    prioridade: Prioridade;
-    idUsuario: number;
-    categoria: Categoria;
-}
-
 export interface UsuarioResponse {
     id: number;
     nome: string;
@@ -109,4 +97,13 @@ export interface UsuarioCreate {
     email: string;
     senha: string;
     perfil: PerfilUsuario;
+}
+
+// --- Login ---
+export interface LoginCreate{
+    email: string;
+    senha: string;
+}
+export interface LoginResponse{
+    token: string;
 }

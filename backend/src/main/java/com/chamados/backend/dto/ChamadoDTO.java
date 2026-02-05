@@ -12,7 +12,6 @@ public class ChamadoDTO {
             String titulo,
             String descricao,
             Prioridade prioridade,
-            Long idUsuario,
             Categoria categoria
     ) {
     }
@@ -44,14 +43,12 @@ public class ChamadoDTO {
 
     public record Concluir(
             String parecerTecnico,
-            Long idTecnico,
             Long idChamado
     ) {
     }
 
     public record Assumir(
-            Long idChamado,
-            Long idTecnico
+            Long idChamado
     ) {
     }
 

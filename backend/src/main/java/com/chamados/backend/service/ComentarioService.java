@@ -23,11 +23,9 @@ public class ComentarioService {
     private final UsuarioRepository usuarioRepository;
 
 
-    public ComentarioDTO.Response adicionarComentario(ComentarioDTO.Create dto) {
+    public ComentarioDTO.Response adicionarComentario(ComentarioDTO.Create dto, Usuario usuario) {
         Chamado chamado = chamadoRepository.findById(dto.chamadoId())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
-        Usuario usuario = usuarioRepository.findById(dto.usuarioId())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         boolean isCliente = usuario.getId().equals(chamado.getCliente().getId());
         boolean isTecnico = chamado.getTecnico() != null && usuario.getId().equals(chamado.getTecnico().getId());

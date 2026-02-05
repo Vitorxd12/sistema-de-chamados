@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 public class ComentarioDTO {
     public record Create(
         Long chamadoId,
-        Long usuarioId,
         String texto
     ){}
     public record Response(

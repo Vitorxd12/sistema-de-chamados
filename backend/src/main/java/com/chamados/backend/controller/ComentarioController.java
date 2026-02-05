@@ -1,9 +1,11 @@
 package com.chamados.backend.controller;
 
 import com.chamados.backend.dto.ComentarioDTO;
+import com.chamados.backend.model.Usuario;
 import com.chamados.backend.service.ComentarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,8 @@ public class ComentarioController {
     }
 
     @PostMapping
-    public ResponseEntity<ComentarioDTO.Response> adicionarComentario(@RequestBody ComentarioDTO.Create comentario) {
-        ComentarioDTO.Response novoComentario = comentarioService.adicionarComentario(comentario);
+    public ResponseEntity<ComentarioDTO.Response> adicionarComentario(@RequestBody ComentarioDTO.Create comentario, @AuthenticationPrincipal Usuario usuario) {
+        ComentarioDTO.Response novoComentario = comentarioService.adicionarComentario(comentario, usuario);
         return ResponseEntity.status(201).body(novoComentario);
     }
 }

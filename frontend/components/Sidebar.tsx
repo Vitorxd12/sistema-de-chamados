@@ -10,6 +10,7 @@ import {MdDashboard, MdLightMode, MdDarkMode} from "react-icons/md";
 import {FaUsers, FaClipboardList, FaHeadset} from "react-icons/fa";
 import {IoSettingsSharp, IoLogOutOutline, IoTicket} from "react-icons/io5";
 import {FiChevronLeft, FiChevronRight} from "react-icons/fi";
+import {LoginService} from "@/services/LoginService";
 
 type IconType = React.ComponentType<{ className?: string }>;
 
@@ -109,7 +110,8 @@ export function Sidebar() {
             <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5 custom-scrollbar">
                 {userRole === "SUPPORT" && (
                     <div>
-                        <SidebarItem href="/pages/dashboard" icon={MdDashboard} label="Dashboard" collapsed={collapsed}/>
+                        <SidebarItem href="/pages/dashboard" icon={MdDashboard} label="Dashboard"
+                                     collapsed={collapsed}/>
                         <SidebarItem href="/pages/usuarios" icon={FaUsers} label="Usuários" collapsed={collapsed}/>
                         <div className="my-4 h-px bg-white/5 mx-2"/>
                     </div>
@@ -139,10 +141,9 @@ export function Sidebar() {
                                     className="p-1.5 rounded-lg hover:opacity-50 text-[rgb(var(--texto))]/60 transition-all">
                                 {theme === "dark" ? <MdLightMode size={20}/> : <MdDarkMode size={20}/>}
                             </button>
-                            <Link href={'/pages/login'}>
-                                <button className="text-[rgb(var(--texto))]/40 hover:text-red-400 p-2"><IoLogOutOutline
-                                    size={20}/></button>
-                            </Link>
+                            <button onClick={LoginService.logout}
+                                    className="text-[rgb(var(--texto))]/40 hover:text-red-400 p-2"><IoLogOutOutline
+                                size={20}/></button>
                         </div>
                     )}
                 </div>

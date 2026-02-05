@@ -9,9 +9,6 @@ public class UsuarioDTO {
         String senha,
         Perfil perfil
     ){}
-    public record Login(
-            String token
-    ){}
     public record Response(
         Long id,
         String nome,

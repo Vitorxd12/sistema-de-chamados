@@ -20,19 +20,13 @@ public class ChamadoService {
     private final ChamadoRepository chamadoRepository;
     private final HistoricoStatusService historicoStatusService;
 
-    public ChamadoDTO.Create criarChamado(ChamadoDTO.Create dto) {
-
-        Usuario usuario = usuarioRepository.findById(dto.idUsuario())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-
-        Categoria categoria = dto.categoria();
-
+    public ChamadoDTO.Create criarChamado(ChamadoDTO.Create dto, Usuario usuario) {
         Chamado chamado = new Chamado();
         chamado.setTitulo(dto.titulo());
         chamado.setDescricao(dto.descricao());
         chamado.setPrioridade(Prioridade.valueOf(dto.prioridade().name()));
         chamado.setCliente(usuario);
-        chamado.setCategoria(categoria);
+        chamado.setCategoria(dto.categoria());
         chamado.setStatus(Status.ABERTO);
 
         chamadoRepository.save(chamado);
@@ -40,13 +34,10 @@ public class ChamadoService {
     }
 
     @Transactional
-    public ChamadoDTO.Assumir assumirChamado(ChamadoDTO.Assumir dto) {
+    public ChamadoDTO.Assumir assumirChamado(ChamadoDTO.Assumir dto, Usuario tecnico) {
 
         Chamado chamado = chamadoRepository.findById(dto.idChamado())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
-
-        Usuario tecnico = usuarioRepository.findById(dto.idTecnico())
-                .orElseThrow(() -> new EntityNotFoundException("Técnico não encontrado"));
 
         if(tecnico.getPerfil().equals(Perfil.USER)){
             throw new RuntimeException("Usuário não é um técnico");
@@ -66,12 +57,9 @@ public class ChamadoService {
     }
 
     @Transactional
-    public ChamadoDTO.Concluir resolverChamado(ChamadoDTO.Concluir dto) {
+    public ChamadoDTO.Concluir resolverChamado(ChamadoDTO.Concluir dto, Usuario tecnico) {
         Chamado chamado = chamadoRepository.findById(dto.idChamado())
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
-
-        Usuario tecnico = usuarioRepository.findById(dto.idTecnico())
-                .orElseThrow(() -> new EntityNotFoundException("Técnico não encontrado"));
 
         if(tecnico.getPerfil().equals(Perfil.USER)){
             throw new RuntimeException("Usuário não é um técnico");

@@ -32,11 +32,11 @@ public class AuthenticationContoller {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO.Login dto){
          var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
          var auth = this.authenticationManager.authenticate(usernamePassword);
          var token = tokenService.generateToken((Usuario) auth.getPrincipal());
-         return ResponseEntity.ok(new UsuarioDTO.Login(token));
+         return ResponseEntity.ok(new AuthenticationDTO.LoginResponse(token));
     }
 
 
