@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/chamados")
@@ -46,6 +48,12 @@ public class ChamadoController {
     @GetMapping
     public ResponseEntity<Iterable<ChamadoDTO.Resumo>> listarChamados() {
         Iterable<ChamadoDTO.Resumo> chamados = chamadoService.listarChamados();
+        return ResponseEntity.ok(chamados);
+    }
+
+    @GetMapping("/meus")
+    public ResponseEntity<List<ChamadoDTO.Resumo>> listarMeusChamados(@AuthenticationPrincipal Usuario usuario) {
+        List<ChamadoDTO.Resumo> chamados = chamadoService.listarChamadosDoUsuario(usuario);
         return ResponseEntity.ok(chamados);
     }
 }

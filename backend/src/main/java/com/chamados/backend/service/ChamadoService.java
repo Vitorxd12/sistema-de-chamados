@@ -94,6 +94,20 @@ public class ChamadoService {
         );
     }
 
+    public List<ChamadoDTO.Resumo> listarChamadosDoUsuario(Usuario usuario) {
+        List<Chamado> chamados = chamadoRepository.findByClienteIdOrderByDataCriacaoDesc(usuario.getId());
+        return chamados.stream()
+                .map(c -> new ChamadoDTO.Resumo(
+                        c.getId(),
+                        c.getTitulo(),
+                        c.getStatus(),
+                        c.getPrioridade(),
+                        c.getDataCriacao(),
+                        c.getCliente().getNome()
+                ))
+                .toList();
+    }
+
     public List<ChamadoDTO.Resumo> listarChamados() {
         List<Chamado> chamados = chamadoRepository.findAllByOrderByDataCriacaoDesc();
         return chamados.stream()
