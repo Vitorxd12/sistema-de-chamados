@@ -5,14 +5,15 @@ import {
     IoAlertCircle, IoPlayCircle, IoFlash, IoChatbubbles
 } from "react-icons/io5";
 import {useEffect, useState} from "react";
-import {DashboardData, ChamadoResumo} from "@/types/interfaces";
+import {ComentarioResponse, DashboardData} from "@/types/interfaces";
 import Fila from "@/app/pages/dashboard/fila";
 import {useRouter} from "next/navigation";
-import {ChamadoService} from "@/services/ChamadoService";
 import {DashboardService} from "@/services/DashboardService";
+import {ComentarioService} from "@/services/ComentarioService";
 
 export default function SupportDashboard() {
     const [stats, setStats] = useState<DashboardData | null>(null);
+        const [comentariosRecentes, setComentariosRecentes] = useState<ComentarioResponse[]>([]);
 
         const router = useRouter();
         const [loading, setLoading] = useState(false);
@@ -21,8 +22,12 @@ export default function SupportDashboard() {
         const carregarDados = async () => {
             setLoading(true);
             try {
-                const dados = await DashboardService.getStats();
+                const [dados, recentes] = await Promise.all([
+                    DashboardService.getStats(),
+                    ComentarioService.recentes(),
+                ]);
                 setStats(dados);
+                setComentariosRecentes(recentes);
             } catch (err) {
                 console.error("Erro ao carregar dados do dashboard:", err);
             } finally {
@@ -90,22 +95,20 @@ export default function SupportDashboard() {
                             </h2>
                             <div
                                 className="liquid-glass rounded-[32px] p-6 border border-[var(--glass-border)] space-y-6">
-                                {[1, 2].map(i => (
-                                    <div key={i}
-                                         className="relative pl-6 border-l-2 border-[rgb(var(--roxo-claro))]/30 space-y-1">
+                                {comentariosRecentes.length === 0 && (
+                                    <p className="text-xs opacity-40 italic text-center">Nenhuma interação recente.</p>
+                                )}
+                                {comentariosRecentes.map(c => (
+                                    <div key={c.id}
+                                         className="relative pl-6 border-l-2 border-[rgb(var(--roxo-claro))]/30 space-y-1 cursor-pointer"
+                                         onClick={() => router.push(`/pages/chamado/${c.chamadoId}`)}>
                                         <div
                                             className="absolute -left-[7px] top-0 w-3 h-3 rounded-full bg-[rgb(var(--roxo-claro))] shadow-[0_0_8px_rgb(var(--roxo-claro))]"/>
-                                        <p className="text-xs font-bold text-[rgb(var(--roxo-claro))] uppercase">Chamado
-                                            #882</p>
-                                        <p className="text-sm italic">"Pode verificar o log do servidor agora?"</p>
-                                        <p className="text-[10px] opacity-40 italic">Enviado por Técnico João •
-                                            14:20</p>
+                                        <p className="text-xs font-bold text-[rgb(var(--roxo-claro))] uppercase">Chamado #{c.chamadoId}</p>
+                                        <p className="text-sm italic">"{c.texto.length > 60 ? c.texto.slice(0, 60) + '...' : c.texto}"</p>
+                                        <p className="text-[10px] opacity-40 italic">Enviado por {c.nomeUsuario} • {new Date(c.dataEnvio).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</p>
                                     </div>
                                 ))}
-                                <button
-                                    className="w-full py-3 rounded-2xl bg-white/5 border border-[var(--glass-border)] text-xs font-bold opacity-60 hover:opacity-100 transition-all">
-                                    Ver todas as notificações
-                                </button>
                             </div>
                         </section>
 

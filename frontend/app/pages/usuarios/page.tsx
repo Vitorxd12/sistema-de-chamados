@@ -14,14 +14,32 @@ export default function GerenciamentoUsuarios() {
     const carregarDados = async () => {
         setLoading(true);
         try {
-            const listaUsuarios = await UsuarioService.response();
-            setListaUsuarios(listaUsuarios);
+            const lista = await UsuarioService.response();
+            setListaUsuarios(lista);
         } catch (err) {
-            console.error("Erro ao carregar dados do dashboard:", err);
+            console.error("Erro ao carregar usuários:", err);
         } finally {
             setLoading(false);
         }
     }
+
+    const handleDesativar = async (id: number) => {
+        try {
+            await UsuarioService.desativar(id);
+            await carregarDados();
+        } catch (err: any) {
+            alert(err.response?.data || "Erro ao desativar usuário.");
+        }
+    };
+
+    const handleReativar = async (id: number) => {
+        try {
+            await UsuarioService.reativar(id);
+            await carregarDados();
+        } catch (err: any) {
+            alert(err.response?.data || "Erro ao reativar usuário.");
+        }
+    };
 
     useEffect(() => {
         carregarDados()
@@ -98,11 +116,19 @@ export default function GerenciamentoUsuarios() {
                                     </td>
                                     <td className="px-6 py-5 text-center">
                                         {user.ativo ? (
-                                            <button title="Desativar Usuário" className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                                            <button
+                                                title="Desativar Usuário"
+                                                onClick={() => handleDesativar(user.id)}
+                                                className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all"
+                                            >
                                                 <IoCloseCircle size={20} />
                                             </button>
                                         ) : (
-                                            <button title="Reativar Usuário" className="p-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500 hover:text-white transition-all">
+                                            <button
+                                                title="Reativar Usuário"
+                                                onClick={() => handleReativar(user.id)}
+                                                className="p-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500 hover:text-white transition-all"
+                                            >
                                                 <IoShieldCheckmark size={20} />
                                             </button>
                                         )}

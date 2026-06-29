@@ -34,7 +34,7 @@ export default function NovoChamado() {
             alert("Chamado aberto com sucesso!");
             router.push('/pages/chamados-usuario');
         } catch (error: any) {
-            alert("Erro ao salvar: " + (error.response?.data?.message || "Servidor offline"));
+            alert("Erro ao salvar: " + (error.response?.data || error.message || "Servidor offline"));
         } finally {
             setLoading(false);
         }

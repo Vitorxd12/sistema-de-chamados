@@ -49,7 +49,7 @@ export default function Fila() {
                                 <div>
                                     <h3 className="font-semibold text-sm">{i.titulo}</h3>
                                     <p className="text-xs opacity-50">
-                                        Solicitado por: {i.nomeCliente} • Há {i.dataCriacao} min
+                                        Solicitado por: {i.nomeCliente} • {formatarRelativo(i.dataCriacao)}
                                     </p>
                                 </div>
                             </div>
@@ -78,6 +78,16 @@ export default function Fila() {
             </div>
         </section>
     );
+}
+
+function formatarRelativo(iso: string): string {
+    const diff = Date.now() - new Date(iso).getTime();
+    const minutos = Math.floor(diff / 60000);
+    if (minutos < 1) return "agora";
+    if (minutos < 60) return `há ${minutos} min`;
+    const horas = Math.floor(minutos / 60);
+    if (horas < 24) return `há ${horas}h`;
+    return `há ${Math.floor(horas / 24)} dia(s)`;
 }
 
 const getPrioridadeEstilo = (prioridade: string) => {
