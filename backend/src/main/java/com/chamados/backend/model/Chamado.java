@@ -39,6 +39,7 @@ public class Chamado {
 
     private LocalDateTime dataFechamento;
 
+    @Enumerated(EnumType.STRING)
     private Categoria categoria;
 
     //Foreign Keys
