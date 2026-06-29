@@ -3,6 +3,7 @@ package com.chamados.backend.service;
 import com.chamados.backend.dto.ComentarioDTO;
 import com.chamados.backend.model.Chamado;
 import com.chamados.backend.model.Comentario;
+import com.chamados.backend.model.Perfil;
 import com.chamados.backend.model.Status;
 import com.chamados.backend.model.Usuario;
 import com.chamados.backend.repository.ChamadoRepository;
@@ -28,7 +29,7 @@ public class ComentarioService {
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
 
         boolean isCliente = usuario.getId().equals(chamado.getCliente().getId());
-        boolean isTecnico = chamado.getTecnico() != null && usuario.getId().equals(chamado.getTecnico().getId());
+        boolean isTecnico = usuario.getPerfil() == Perfil.SUPPORT || usuario.getPerfil() == Perfil.ADMIN;
 
         if (!isCliente && !isTecnico) {
             throw new RuntimeException("Usuário não está autorizado a comentar neste chamado");
@@ -52,6 +53,19 @@ public class ComentarioService {
                 comentario.getDataEnvio()
         );
     }
+    public List<ComentarioDTO.Response> comentariosRecentes() {
+        return comentarioRepository.findTop5ByOrderByDataEnvioDesc().stream()
+                .map(c -> new ComentarioDTO.Response(
+                        c.getId(),
+                        c.getChamado().getId(),
+                        c.getUsuario().getId(),
+                        c.getUsuario().getNome(),
+                        c.getTexto(),
+                        c.getDataEnvio()
+                ))
+                .toList();
+    }
+
     public List<ComentarioDTO.Response> comentariosDoChamado(long chamadoId) {
         Chamado chamado = chamadoRepository.findById(chamadoId)
                 .orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));

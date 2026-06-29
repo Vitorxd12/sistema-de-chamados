@@ -28,4 +28,9 @@ public class ComentarioController {
         ComentarioDTO.Response novoComentario = comentarioService.adicionarComentario(comentario, usuario);
         return ResponseEntity.status(201).body(novoComentario);
     }
+
+    @GetMapping("/recentes")
+    public ResponseEntity<List<ComentarioDTO.Response>> comentariosRecentes() {
+        return ResponseEntity.ok(comentarioService.comentariosRecentes());
+    }
 }

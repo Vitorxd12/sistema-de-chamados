@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
 
-    // Busca todos os comentários de um chamado específico em ordem cronológica
     List<Comentario> findByChamadoIdOrderByDataEnvioAsc(Long chamadoId);
+
+    List<Comentario> findTop5ByOrderByDataEnvioDesc();
 }
