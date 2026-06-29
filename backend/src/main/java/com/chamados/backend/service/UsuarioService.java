@@ -44,6 +44,13 @@ public class UsuarioService {
                 .toList();
     }
 
+    public void reativarUsuario(Long id){
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        usuario.setAtivo(true);
+        usuarioRepository.save(usuario);
+    }
+
     public void desativarUsuario(Long id){
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));

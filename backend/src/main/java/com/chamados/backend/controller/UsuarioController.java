@@ -30,9 +30,15 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    @PatchMapping("/desativar/{id}") // Desativar usuário
+    @PatchMapping("/desativar/{id}")
     public ResponseEntity<String> desativarUsuario(@PathVariable Long id) {
         usuarioService.desativarUsuario(id);
         return ResponseEntity.status(HttpStatus.OK).body("Usuário desativado com sucesso.");
+    }
+
+    @PatchMapping("/reativar/{id}")
+    public ResponseEntity<String> reativarUsuario(@PathVariable Long id) {
+        usuarioService.reativarUsuario(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário reativado com sucesso.");
     }
 }
