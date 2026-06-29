@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: 'http://localhost:8080/api', // URL do seu Spring Boot
+    baseURL: 'http://localhost:9247/api',
     headers: {
         "Content-Type": "application/json",
     }
@@ -15,3 +15,15 @@ api.interceptors.request.use((config) => {
 }, (error) => {
     return Promise.reject(error);
 });
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401 && typeof window !== 'undefined') {
+            localStorage.removeItem("token");
+            localStorage.removeItem("userRole");
+            window.location.href = "/welcome/login";
+        }
+        return Promise.reject(error);
+    }
+);

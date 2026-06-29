@@ -13,6 +13,9 @@ export const UsuarioService = {
     desativar: async (id: number): Promise<String> => {
         const response = await api.patch(`/usuarios/desativar/${id}`);
         return response.data;
+    },
+    reativar: async (id: number): Promise<String> => {
+        const response = await api.patch(`/usuarios/reativar/${id}`);
+        return response.data;
     }
-
 }
