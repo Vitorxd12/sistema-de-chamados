@@ -40,6 +40,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/api/dashboard").hasRole("SUPPORT")
                         .requestMatchers(HttpMethod.PATCH, "/api/chamados/assumir").hasRole("SUPPORT")
                         .requestMatchers(HttpMethod.PATCH, "/api/chamados/resolver").hasRole("SUPPORT")
+                        .requestMatchers(HttpMethod.PATCH, "/api/usuarios/desativar/**").hasRole("SUPPORT")
+                        .requestMatchers(HttpMethod.PATCH, "/api/usuarios/reativar/**").hasRole("SUPPORT")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -50,7 +52,7 @@ public class SecurityConfigurations {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // Libera o acesso para o seu front-end Next.js
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:4731"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);
