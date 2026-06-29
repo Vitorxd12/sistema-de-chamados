@@ -7,7 +7,10 @@ public class AuthenticationDTO {
     ) {
     }
     public record LoginResponse(
-            String token
+            String token,
+            String perfil,
+            Long id,
+            String nome
     ){}
 
 }

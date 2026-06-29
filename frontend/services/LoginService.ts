@@ -1,5 +1,4 @@
 import { api } from './api';
-import {router} from "next/client";
 
 export const LoginService = {
     login: async (formData: any) => {
@@ -8,6 +7,9 @@ export const LoginService = {
         if (response.data.token && typeof window !== "undefined")  {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userEmail", formData.email);
+            localStorage.setItem("userRole", response.data.perfil);
+            localStorage.setItem("userId", String(response.data.id));
+            localStorage.setItem("userName", response.data.nome);
         }
         return response.data;
     },

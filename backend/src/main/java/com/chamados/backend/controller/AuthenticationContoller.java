@@ -35,8 +35,9 @@ public class AuthenticationContoller {
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO.Login dto){
          var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
          var auth = this.authenticationManager.authenticate(usernamePassword);
-         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
-         return ResponseEntity.ok(new AuthenticationDTO.LoginResponse(token));
+         var usuario = (Usuario) auth.getPrincipal();
+         var token = tokenService.generateToken(usuario);
+         return ResponseEntity.ok(new AuthenticationDTO.LoginResponse(token, usuario.getPerfil().name(), usuario.getId(), usuario.getNome()));
     }
 
 
